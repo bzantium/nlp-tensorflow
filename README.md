@@ -1,6 +1,6 @@
 # NLP Tutorial with Deep Learning using tensorflow
 
-## Install
+## Install requirements
 
 ```
 pip install -r requirements.txt
