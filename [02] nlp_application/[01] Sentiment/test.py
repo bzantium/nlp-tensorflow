@@ -26,9 +26,12 @@ if __name__ == "__main__":
         if test == "exit":
             break
         speak = sentence_to_index_morphs([test], vocab, max_length)
-        label, _ = model.predict(speak)
-        if label[0] == 0:
-            response = '기분이 좋지 않아 보여요 :('
+        label, prob = model.predict(speak)
+        if prob[0] < 0.6:
+            response = '차분해 보이시네요 :)'
         else:
-            response = '기분이 좋아 보이시네요!'
+            if label[0] == 0:
+                response = '기분이 좋지 않아 보여요 :('
+            else:
+                response = '기분이 좋아 보이시네요!'
         print("Bot >> ", response, "\n")
