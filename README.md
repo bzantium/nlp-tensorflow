@@ -1,5 +1,7 @@
 # NLP Tutorial with Deep Learning using tensorflow
 
+<br />
+
 ## 1. install requirements
 
 ```
