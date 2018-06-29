@@ -5,7 +5,7 @@
 ## 1. install requirements
 
 ```
-pip install -r requirements.txt
+$ pip install -r requirements.txt
 ```
 
 <br />
@@ -30,13 +30,13 @@ If you train the models without gpu, it can take quite long time.<br />
 ### train
 
 ```
-python train.py
+$ python train.py
 ```
 
 ### implementation
 
 ```
-python test.py
+$ python test.py
 ```
 
 <br />
@@ -44,6 +44,15 @@ python test.py
 ## 4. notice
 1. [02] nlp_application/[01] Sentiment 의 경우, models 폴더 안 model-31000.zip 파일의 압축을 풀어주어야 train 없이 바로 test 할 수 있습니다.<br /><br />
 For [02] nlp_application/[01] Sentiment, you must unzip model-31000.zip in folder 'models' to test the model without training.<br /><br />
+
+### ubuntu/mac: how to unzip in command line
+
+```
+$ zip -FF model-31000.zip --out model-31000-full.zip
+$ unzip model-31000-full.zip
+```
+
+<br />
 
 2. 모든 데이터는 한국어로 이루어져 있습니다.<br /><br />
 Every dataset is written in Korean.<br /><br />
