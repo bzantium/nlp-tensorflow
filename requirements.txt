@@ -1,0 +1,5 @@
+numpy==1.14.2
+gensim==3.4.0
+konlpy==0.4.4
+pandas==0.22.0
+tensorflow==1.4.0
