@@ -42,8 +42,8 @@ python test.py
 <br />
 
 ## 4. notice
-1. [01] Sentiment 의 경우, models 폴더 안 model-31000.zip 파일의 압축을 풀어주어야 train 없이 바로 test 할 수 있습니다.<br /><br />
-For [01] Sentiment, you must unzip model-31000.zip in folder 'models' to test the model without training.<br /><br />
+1. [02] nlp_application/[01] Sentiment 의 경우, models 폴더 안 model-31000.zip 파일의 압축을 풀어주어야 train 없이 바로 test 할 수 있습니다.<br /><br />
+For [02] nlp_application/[01] Sentiment, you must unzip model-31000.zip in folder 'models' to test the model without training.<br /><br />
 
 2. 모든 데이터는 한국어로 이루어져 있습니다.<br /><br />
 Every dataset is written in Korean.<br /><br />
