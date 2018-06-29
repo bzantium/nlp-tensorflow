@@ -47,3 +47,6 @@ For [01] Sentiment, you must unzip model-31000.zip in folder 'models' to test th
 
 2. 모든 데이터는 한국어로 이루어져 있습니다.<br /><br />
 Every dataset is written in Korean.
+
+3. konlpy 설치는 <href>http://konlpy.org/en/v0.4.4/install/</href> 를 참조하세요.<br />
+For installation 'konlpy', please refer to <href>http://konlpy.org/en/v0.4.4/install/</href>
