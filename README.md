@@ -6,12 +6,16 @@
 pip install -r requirements.txt
 ```
 
+<br />
+
 ## [01] sentiment_analysis
 
 네이버 영화 평점 데이터를 이용하여 여러 딥러닝 모델을 비교해 볼 수 있습니다.<br />
 다양한 컴퓨터 사양으로 테스트 해 볼 수 있도록 데이터셋 train.txt, train-50T.txt, train-5T.txt 세 가지를 두었습니다.<br /><br />
 You can compare various deep learning models using naver movie review dataset.<br />
 In order to make users able to test within their computer's capability, I uploaded three dataset: train.txt, train-50T.txt, train-5T.txt
+
+<br />
 
 ## [02] nlp_application
 
@@ -32,6 +36,8 @@ python train.py
 ```
 python test.py
 ```
+
+<br />
 
 ## notice
 1. [01] Sentiment 의 경우, models 폴더 안 model-31000.zip 파일의 압축을 풀어주어야 train 없이 바로 test 할 수 있습니다.<br /><br />
