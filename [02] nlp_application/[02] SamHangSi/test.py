@@ -15,7 +15,7 @@ if __name__ == "__main__":
         reverse_vocab[value] = key
     vocab_size = len(vocab)
     model = reRNN(sess=sess, name="reRNN", max_step=50, vocab_size=vocab_size)
-    saver = tf.train.Saver(max_to_keep=5)
+    saver = tf.train.Saver()
     saver.restore(sess, tf.train.latest_checkpoint(PATH))
 
     while(True):
