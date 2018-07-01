@@ -69,6 +69,7 @@ def sentence_to_onehot(lines, vocab):
     
     if type(lines) is str:
         tokens = tokenizer(lines)
+        tokens = set(tokens)
         one_hots = np.zeros(vocab_size, dtype=int)
         for token in tokens:
             if token in vocab.keys():
@@ -77,6 +78,7 @@ def sentence_to_onehot(lines, vocab):
         one_hots = []
         for line in lines:
             tokens = tokenizer(line)
+            tokens = set(tokens)
             one_hot = np.zeros(vocab_size, dtype=int)
             for token in tokens:
                 if token in vocab.keys():
@@ -232,6 +234,7 @@ def sentence_to_onehot_pos(lines, vocab):
     
     if type(lines) is str:
         tokens = pos_extractor(lines)
+        tokens = set(tokens)
         one_hots = np.zeros(vocab_size, dtype=int)
         for token in tokens:
             if token in vocab.keys():
@@ -240,6 +243,7 @@ def sentence_to_onehot_pos(lines, vocab):
         one_hots = []
         for line in lines:
             tokens = pos_extractor(line)
+            tokens = set(tokens)
             one_hot = np.zeros(vocab_size, dtype=int)
             for token in tokens:
                 if token in vocab.keys():
@@ -394,6 +398,7 @@ def sentence_to_onehot_morphs(lines, vocab):
     
     if type(lines) is str:
         tokens = morphs_extractor(lines)
+        tokens = set(tokens)
         one_hots = np.zeros(vocab_size, dtype=int)
         for token in tokens:
             if token in vocab.keys():
@@ -402,6 +407,7 @@ def sentence_to_onehot_morphs(lines, vocab):
         one_hots = []
         for line in lines:
             tokens = morphs_extractor(line)
+            tokens = set(tokens)
             one_hot = np.zeros(vocab_size, dtype=int)
             for token in tokens:
                 if token in vocab.keys():
