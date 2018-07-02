@@ -2,7 +2,7 @@
 
 <br />
 
-## 1. install requirements
+## 1. Install requirements
 
 ```
 $ pip install -r requirements.txt
@@ -15,6 +15,15 @@ $ pip install -r requirements.txt
 네이버 영화 평점 데이터를 이용하여 여러 딥러닝 모델을 비교해 볼 수 있습니다.<br />
 다양한 컴퓨터 사양으로 테스트 해 볼 수 있도록 데이터셋을 크기에 따라 세 가지를 두었습니다.<br /><br />
 
+### Contents
+1. [Logistic Regression](https://github.com/Bricoler/nlp-tensorflow/blob/master/%5B01%5D%20sentiment_analysis/%5B01%5D%20logistic_regression.ipynb)
+2. [Feed Forward Neural Network](https://github.com/Bricoler/nlp-tensorflow/blob/master/%5B01%5D%20sentiment_analysis/%5B02%5D%20three_layer_net.ipynb)
+3. [RNN](https://github.com/Bricoler/nlp-tensorflow/blob/master/%5B01%5D%20sentiment_analysis/%5B03%5D%20RNN.ipynb)
+4. [LSTM](https://github.com/Bricoler/nlp-tensorflow/blob/master/%5B01%5D%20sentiment_analysis/%5B04%5D%20LSTM.ipynb)
+5. [CNN](https://github.com/Bricoler/nlp-tensorflow/blob/master/%5B01%5D%20sentiment_analysis/%5B05%5D%20CNN.ipynb)
+6. [word2vec](https://github.com/Bricoler/nlp-tensorflow/blob/master/%5B01%5D%20sentiment_analysis/%5B08%5D%20word2vec.ipynb)
+7. [doc2vec](https://github.com/Bricoler/nlp-tensorflow/blob/master/%5B01%5D%20sentiment_analysis/%5B09%5D%20doc2vec.ipynb)
+  
 <br />
 
 ## 3. [02] nlp_application
@@ -36,7 +45,7 @@ $ python test.py
 
 <br />
 
-## 4. notice
+## 4. Notice
 1. [02] nlp_application/[01] Sentiment 의 경우, models 폴더 안 model-31000.zip 파일의 압축을 풀어주어야 train 없이 바로 test 할 수 있습니다.<br />
 ### ubuntu/mac: how to unzip in command line
 ```
