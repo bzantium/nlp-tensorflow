@@ -1,5 +1,4 @@
 import numpy as np
-import pandas as pd
 import re
 from collections import Counter
 from konlpy.tag import Twitter
@@ -49,7 +48,7 @@ def build_vocab(lines, max_vocab=None):
     vocab['<UNK>'] = 1
     vocab_idx = 2
     
-    if max_vocab > len(word_counter) or max_vocab == None:
+    if max_vocab == None or max_vocab > len(word_counter):
         max_vocab = len(word_counter)
     
     for key, value in word_counter.most_common(max_vocab):
@@ -212,7 +211,7 @@ def build_vocab_pos(lines, max_vocab=None):
     vocab['<UNK>'] = 1
     vocab_idx = 2
     
-    if max_vocab > len(word_counter) or max_vocab == None:
+    if max_vocab == None or max_vocab > len(word_counter):
         max_vocab = len(word_counter)
     
     for key, value in word_counter.most_common(max_vocab):
@@ -374,7 +373,7 @@ def build_vocab_morphs(lines, max_vocab=None):
     vocab['<UNK>'] = 1
     vocab_idx = 2
     
-    if max_vocab > len(word_counter) or max_vocab == None:
+    if max_vocab == None or max_vocab > len(word_counter):
         max_vocab = len(word_counter)
     
     for key, value in word_counter.most_common(max_vocab):
