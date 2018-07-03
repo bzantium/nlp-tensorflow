@@ -24,7 +24,7 @@ class logistic_regression:
             
             
         with tf.variable_scope("loss"):
-            self.loss = tf.reduce_mean(tf.nn.sigmoid_cross_entropy_with_logits(logits=logits, labels=Y_one_hot))
+            self.loss = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=logits, labels=Y_one_hot))
         
         with tf.variable_scope("train", reuse=tf.AUTO_REUSE):
             optimizer = tf.train.AdamOptimizer(self.lr)
