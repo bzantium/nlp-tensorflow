@@ -526,6 +526,8 @@ class GRU:
         return self.sess.run(self.accuracy, feed_dict={self.input_x: input_x, self.input_y: input_y})
 
 
+import tensorflow as tf
+
 class CNN(object):
     """
     The implementation is based on following:
@@ -533,10 +535,11 @@ class CNN(object):
     """
 
     def __init__(
-            self, sess, vocab_size, embedding_size=300,
+            self, sess, vocab_size, sequence_length=30, embedding_size=300,
             filter_sizes=(3, 4, 5), num_filters=128, n_class=2, lr=1e-2, trainable=True):
         self.sess = sess
         self.vocab_size = vocab_size
+        self.sequence_length = sequence_length
         self.embedding_size = embedding_size
         self.filter_sizes = filter_sizes
         self.num_filters = num_filters
@@ -548,9 +551,8 @@ class CNN(object):
     def _build_net(self):
         # Placeholders for input, output
         with tf.variable_scope("placeholder"):
-            self.input_x = tf.placeholder(tf.int32, (None, None))
+            self.input_x = tf.placeholder(tf.int32, (None, self.sequence_length))
             self.input_y = tf.placeholder(tf.int32, (None,))
-            self.dropout_keep_prob = tf.placeholder(tf.float32)
             self.embedding_placeholder = tf.placeholder(tf.float32, (self.vocab_size, self.embedding_size))
         # Embedding layer
         with tf.variable_scope("embedding", reuse=tf.AUTO_REUSE):
@@ -580,17 +582,18 @@ class CNN(object):
                 # Apply nonlinearity
                 h = tf.nn.relu(tf.nn.bias_add(conv, b), name="relu")
                 # Maxpooling over the outputs
-                pooled = tf.reduce_max(h, axis=1, keep_dims=True)
+                pooled = tf.nn.max_pool(
+                    h,
+                    ksize=[1, self.sequence_length - filter_size + 1, 1, 1],
+                    strides=[1, 1, 1, 1],
+                    padding='VALID',
+                    name="pool")
                 pooled_outputs.append(pooled)
 
         # Combine all the pooled features
         num_filters_total = self.num_filters * len(self.filter_sizes)
         h_pool = tf.concat(pooled_outputs, 3)
         h_pool_flat = tf.reshape(h_pool, (-1, num_filters_total))
-
-        # Add dropout
-        with tf.name_scope("dropout"):
-            h_drop = tf.nn.dropout(h_pool_flat, self.dropout_keep_prob)
 
         # Final (unnormalized) scores and predictions
         with tf.variable_scope("output", reuse=tf.AUTO_REUSE):
@@ -599,7 +602,7 @@ class CNN(object):
                 shape=(num_filters_total, self.n_class),
                 initializer=tf.contrib.layers.xavier_initializer())
             b = tf.Variable(tf.constant(0.1, shape=(self.n_class,)), name="b")
-            logits = tf.nn.xw_plus_b(h_drop, W, b, name="logits")
+            logits = tf.nn.xw_plus_b(h_pool_flat, W, b, name="logits")
             self.prob = tf.reduce_max(tf.nn.softmax(logits), axis=1, name="prob")
             self.prediction = tf.cast(tf.argmax(logits, 1), tf.int32, name="predictions")
 
@@ -628,16 +631,12 @@ class CNN(object):
     def embedding_assign(self, embedding):
         return self.sess.run(self.embedding_init, feed_dict={self.embedding_placeholder: embedding})
 
-    def train(self, input_x, input_y, dropout_keep_prob=0.7):
-        return self.sess.run([self.loss, self.train_op], feed_dict={self.input_x: input_x, self.input_y: input_y,
-                                                                    self.dropout_keep_prob: dropout_keep_prob})
+    def train(self, input_x, input_y):
+        return self.sess.run([self.loss, self.train_op], feed_dict={self.input_x: input_x, self.input_y: input_y})
 
     def predict(self, input_x):
-        return self.sess.run((self.prediction, self.prob),
-                             feed_dict={self.input_x: input_x, self.dropout_keep_prob: 1.0})
+        return self.sess.run((self.prediction, self.prob), feed_dict={self.input_x: input_x})
 
     def get_accuracy(self, input_x, input_y):
-        return self.sess.run(self.accuracy,
-                             feed_dict={self.input_x: input_x, self.input_y: input_y, self.dropout_keep_prob: 1.0})
-
+        return self.sess.run(self.accuracy, feed_dict={self.input_x: input_x, self.input_y: input_y})
 
