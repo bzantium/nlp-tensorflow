@@ -1,5 +1,4 @@
 import numpy as np
-import pandas as pd
 import re
 from collections import Counter
 from konlpy.tag import Twitter
@@ -49,7 +48,7 @@ def build_vocab(lines, max_vocab=None):
     vocab['<UNK>'] = 1
     vocab_idx = 2
     
-    if max_vocab > len(word_counter) or max_vocab == None:
+    if max_vocab == None or max_vocab > len(word_counter):
         max_vocab = len(word_counter)
     
     for key, value in word_counter.most_common(max_vocab):
@@ -67,22 +66,18 @@ def sentence_to_onehot(lines, vocab):
     indexes = []
     vocab_size = len(vocab)
     
-    if type(lines) is str:
-        tokens = tokenizer(lines)
-        one_hots = np.zeros(vocab_size, dtype=int)
+    assert (type(lines) is list or tuple), "Input type must be list or tuple."
+    
+    one_hots = []
+    for line in lines:
+        tokens = tokenizer(line)
+        tokens = set(tokens)
+        one_hot = np.zeros(vocab_size, dtype=int)
         for token in tokens:
             if token in vocab.keys():
-                one_hots[vocab[token]] = 1
-    else:
-        one_hots = []
-        for line in lines:
-            tokens = tokenizer(line)
-            one_hot = np.zeros(vocab_size, dtype=int)
-            for token in tokens:
-                if token in vocab.keys():
-                    one_hot[vocab[token]] = 1
-            one_hots.append(one_hot)
-        one_hots = np.asarray(one_hots)
+                one_hot[vocab[token]] = 1
+        one_hots.append(one_hot)
+    one_hots = np.asarray(one_hots)
             
     return one_hots
 
@@ -104,8 +99,11 @@ def sentence_to_tfidf(lines, vocab, IDF):
     vocab_size = len(vocab)
     doc_size = len(lines)
     
-    if type(lines) is str:
-        tokens = tokenizer(lines)
+    assert (type(lines) is list or tuple), "Input type must be list or tuple."
+
+    tf_idfs = []
+    for line in lines:
+        tokens = tokenizer(line)
         freq = dict()
         TF = np.zeros(vocab_size, dtype=float)
         for token in tokens:
@@ -122,31 +120,9 @@ def sentence_to_tfidf(lines, vocab, IDF):
         for token in tokens:
             if token in vocab.keys():
                 TF[vocab[token]] = 0.5 + 0.5 * freq[token] / max_tf
-        tf_idfs = np.multiply(TF, IDF)
-        
-    else:
-        tf_idfs = []
-        for line in lines:
-            tokens = tokenizer(line)
-            freq = dict()
-            TF = np.zeros(vocab_size, dtype=float)
-            for token in tokens:
-                if token in vocab.keys():
-                    if token in freq.keys():
-                        freq[token] += 1
-                    else:
-                        freq[token] = 1
-            if len(freq) == 0:
-                max_tf = 0
-            else:
-                max_tf = max(freq.values())
-            tokens = set(tokens)
-            for token in tokens:
-                if token in vocab.keys():
-                    TF[vocab[token]] = 0.5 + 0.5 * freq[token] / max_tf
-            tf_idf = np.multiply(TF, IDF)
-            tf_idfs.append(tf_idf)
-        tf_idfs = np.asarray(tf_idfs)
+        tf_idf = np.multiply(TF, IDF)
+        tf_idfs.append(tf_idf)
+    tf_idfs = np.asarray(tf_idfs)
 
     return tf_idfs
 
@@ -155,41 +131,34 @@ def sentence_to_index(lines, vocab, max_length=0):
     indexes = []
     max_len = max_length
 
-    if type(lines) is str:
-        tokens = tokenizer(lines)
-        for token in tokens:
-            if token in vocab.keys():
-                indexes.append(vocab[token])
-            else:
-                indexes.append(vocab['<UNK>'])
+    assert (type(lines) is list or tuple), "Input type must be list or tuple."
 
+    if max_len == 0:
+        for line in lines:
+            token = tokenizer(line)
+            tokens.append(token)
+            length = len(token)
+            if max_len < length:
+                max_len = length
     else:
-        if max_len == 0:
-            for line in lines:
-                token = tokenizer(line)
-                tokens.append(token)
-                length = len(token)
-                if max_len < length:
-                    max_len = length
+        for line in lines:
+            token = tokenizer(line)
+            tokens.append(token)            
+
+    for token in tokens:
+        if len(token) < max_len:
+            temp = token
+            for _ in range(len(temp), max_len):
+                temp.append('<PAD>')
         else:
-            for line in lines:
-                token = tokenizer(line)
-                tokens.append(token)            
-        
-        for token in tokens:
-            if len(token) < max_len:
-                temp = token
-                for _ in range(len(temp), max_len):
-                    temp.append('<PAD>')
+            temp = token[:max_len]
+        index = []
+        for char in temp:
+            if char in vocab.keys():
+                index.append(vocab[char])
             else:
-                temp = token[:max_len]
-            index = []
-            for char in temp:
-                if char in vocab.keys():
-                    index.append(vocab[char])
-                else:
-                    index.append(vocab['<UNK>'])
-            indexes.append(index)
+                index.append(vocab['<UNK>'])
+        indexes.append(index)
 
     return indexes
 
@@ -212,7 +181,7 @@ def build_vocab_pos(lines, max_vocab=None):
     vocab['<UNK>'] = 1
     vocab_idx = 2
     
-    if max_vocab > len(word_counter) or max_vocab == None:
+    if max_vocab == None or max_vocab > len(word_counter):
         max_vocab = len(word_counter)
     
     for key, value in word_counter.most_common(max_vocab):
@@ -230,23 +199,19 @@ def sentence_to_onehot_pos(lines, vocab):
     indexes = []
     vocab_size = len(vocab)
     
-    if type(lines) is str:
-        tokens = pos_extractor(lines)
-        one_hots = np.zeros(vocab_size, dtype=int)
+    assert (type(lines) is list or tuple), "Input type must be list or tuple."
+
+    one_hots = []
+    for line in lines:
+        tokens = pos_extractor(line)
+        tokens = set(tokens)
+        one_hot = np.zeros(vocab_size, dtype=int)
         for token in tokens:
             if token in vocab.keys():
-                one_hots[vocab[token]] = 1
-    else:
-        one_hots = []
-        for line in lines:
-            tokens = pos_extractor(line)
-            one_hot = np.zeros(vocab_size, dtype=int)
-            for token in tokens:
-                if token in vocab.keys():
-                    one_hot[vocab[token]] = 1
-            one_hots.append(one_hot)
-        one_hots = np.asarray(one_hots)
-            
+                one_hot[vocab[token]] = 1
+        one_hots.append(one_hot)
+    one_hots = np.asarray(one_hots)
+
     return one_hots
 
 def cal_idf_pos(lines, vocab):
@@ -267,8 +232,11 @@ def sentence_to_tfidf_pos(lines, vocab, IDF):
     vocab_size = len(vocab)
     doc_size = len(lines)
     
-    if type(lines) is str:
-        tokens = pos_extractor(lines)
+    assert (type(lines) is list or tuple), "Input type must be list or tuple."
+
+    tf_idfs = []
+    for line in lines:
+        tokens = pos_extractor(line)
         freq = dict()
         TF = np.zeros(vocab_size, dtype=float)
         for token in tokens:
@@ -285,31 +253,9 @@ def sentence_to_tfidf_pos(lines, vocab, IDF):
         for token in tokens:
             if token in vocab.keys():
                 TF[vocab[token]] = 0.5 + 0.5 * freq[token] / max_tf
-        tf_idfs = np.multiply(TF, IDF)
-        
-    else:
-        tf_idfs = []
-        for line in lines:
-            tokens = pos_extractor(line)
-            freq = dict()
-            TF = np.zeros(vocab_size, dtype=float)
-            for token in tokens:
-                if token in vocab.keys():
-                    if token in freq.keys():
-                        freq[token] += 1
-                    else:
-                        freq[token] = 1
-            if len(freq) == 0:
-                max_tf = 0
-            else:
-                max_tf = max(freq.values())
-            tokens = set(tokens)
-            for token in tokens:
-                if token in vocab.keys():
-                    TF[vocab[token]] = 0.5 + 0.5 * freq[token] / max_tf
-            tf_idf = np.multiply(TF, IDF)
-            tf_idfs.append(tf_idf)
-        tf_idfs = np.asarray(tf_idfs)
+        tf_idf = np.multiply(TF, IDF)
+        tf_idfs.append(tf_idf)
+    tf_idfs = np.asarray(tf_idfs)
 
     return tf_idfs
 
@@ -318,41 +264,34 @@ def sentence_to_index_pos(lines, vocab, max_length=0):
     indexes = []
     max_len = max_length
 
-    if type(lines) is str:
-        tokens = pos_extractor(lines)
-        for token in tokens:
-            if token in vocab.keys():
-                indexes.append(vocab[token])
-            else:
-                indexes.append(vocab['<UNK>'])
+    assert (type(lines) is list or tuple), "Input type must be list or tuple."
 
+    if max_len == 0:
+        for line in lines:
+            token = pos_extractor(line)
+            tokens.append(token)
+            length = len(token)
+            if max_len < length:
+                max_len = length
     else:
-        if max_len == 0:
-            for line in lines:
-                token = pos_extractor(line)
-                tokens.append(token)
-                length = len(token)
-                if max_len < length:
-                    max_len = length
+        for line in lines:
+            token = pos_extractor(line)
+            tokens.append(token)            
+
+    for token in tokens:
+        if len(token) < max_len:
+            temp = token
+            for _ in range(len(temp), max_len):
+                temp.append('<PAD>')
         else:
-            for line in lines:
-                token = pos_extractor(line)
-                tokens.append(token)            
-        
-        for token in tokens:
-            if len(token) < max_len:
-                temp = token
-                for _ in range(len(temp), max_len):
-                    temp.append('<PAD>')
+            temp = token[:max_len]
+        index = []
+        for char in temp:
+            if char in vocab.keys():
+                index.append(vocab[char])
             else:
-                temp = token[:max_len]
-            index = []
-            for char in temp:
-                if char in vocab.keys():
-                    index.append(vocab[char])
-                else:
-                    index.append(vocab['<UNK>'])
-            indexes.append(index)
+                index.append(vocab['<UNK>'])
+        indexes.append(index)
 
     return indexes
 
@@ -374,7 +313,7 @@ def build_vocab_morphs(lines, max_vocab=None):
     vocab['<UNK>'] = 1
     vocab_idx = 2
     
-    if max_vocab > len(word_counter) or max_vocab == None:
+    if max_vocab == None or max_vocab > len(word_counter):
         max_vocab = len(word_counter)
     
     for key, value in word_counter.most_common(max_vocab):
@@ -392,23 +331,19 @@ def sentence_to_onehot_morphs(lines, vocab):
     indexes = []
     vocab_size = len(vocab)
     
-    if type(lines) is str:
-        tokens = morphs_extractor(lines)
-        one_hots = np.zeros(vocab_size, dtype=int)
+    assert (type(lines) is list or tuple), "Input type must be list or tuple."
+
+    one_hots = []
+    for line in lines:
+        tokens = morphs_extractor(line)
+        tokens = set(tokens)
+        one_hot = np.zeros(vocab_size, dtype=int)
         for token in tokens:
             if token in vocab.keys():
-                one_hots[vocab[token]] = 1
-    else:
-        one_hots = []
-        for line in lines:
-            tokens = morphs_extractor(line)
-            one_hot = np.zeros(vocab_size, dtype=int)
-            for token in tokens:
-                if token in vocab.keys():
-                    one_hot[vocab[token]] = 1
-            one_hots.append(one_hot)
-        one_hots = np.asarray(one_hots)
-            
+                one_hot[vocab[token]] = 1
+        one_hots.append(one_hot)
+    one_hots = np.asarray(one_hots)
+
     return one_hots
 
 def cal_idf_morphs(lines, vocab):
@@ -429,8 +364,11 @@ def sentence_to_tfidf_morphs(lines, vocab, IDF):
     vocab_size = len(vocab)
     doc_size = len(lines)
     
-    if type(lines) is str:
-        tokens = morphs_extractor(lines)
+    assert (type(lines) is list or tuple), "Input type must be list or tuple."
+    
+    tf_idfs = []
+    for line in lines:
+        tokens = morphs_extractor(line)
         freq = dict()
         TF = np.zeros(vocab_size, dtype=float)
         for token in tokens:
@@ -447,31 +385,9 @@ def sentence_to_tfidf_morphs(lines, vocab, IDF):
         for token in tokens:
             if token in vocab.keys():
                 TF[vocab[token]] = 0.5 + 0.5 * freq[token] / max_tf
-        tf_idfs = np.multiply(TF, IDF)
-        
-    else:
-        tf_idfs = []
-        for line in lines:
-            tokens = morphs_extractor(line)
-            freq = dict()
-            TF = np.zeros(vocab_size, dtype=float)
-            for token in tokens:
-                if token in vocab.keys():
-                    if token in freq.keys():
-                        freq[token] += 1
-                    else:
-                        freq[token] = 1
-            if len(freq) == 0:
-                max_tf = 0
-            else:
-                max_tf = max(freq.values())
-            tokens = set(tokens)
-            for token in tokens:
-                if token in vocab.keys():
-                    TF[vocab[token]] = 0.5 + 0.5 * freq[token] / max_tf
-            tf_idf = np.multiply(TF, IDF)
-            tf_idfs.append(tf_idf)
-        tf_idfs = np.asarray(tf_idfs)
+        tf_idf = np.multiply(TF, IDF)
+        tf_idfs.append(tf_idf)
+    tf_idfs = np.asarray(tf_idfs)
 
     return tf_idfs
 
@@ -480,41 +396,34 @@ def sentence_to_index_morphs(lines, vocab, max_length=0):
     indexes = []
     max_len = max_length
 
-    if type(lines) is str:
-        tokens = morphs_extractor(lines)
-        for token in tokens:
-            if token in vocab.keys():
-                indexes.append(vocab[token])
-            else:
-                indexes.append(vocab['<UNK>'])
+    assert (type(lines) is list or tuple), "Input type must be list or tuple."
 
+    if max_len == 0:
+        for line in lines:
+            token = morphs_extractor(line)
+            tokens.append(token)
+            length = len(token)
+            if max_len < length:
+                max_len = length
     else:
-        if max_len == 0:
-            for line in lines:
-                token = morphs_extractor(line)
-                tokens.append(token)
-                length = len(token)
-                if max_len < length:
-                    max_len = length
+        for line in lines:
+            token = morphs_extractor(line)
+            tokens.append(token)            
+
+    for token in tokens:
+        if len(token) < max_len:
+            temp = token
+            for _ in range(len(temp), max_len):
+                temp.append('<PAD>')
         else:
-            for line in lines:
-                token = morphs_extractor(line)
-                tokens.append(token)            
-        
-        for token in tokens:
-            if len(token) < max_len:
-                temp = token
-                for _ in range(len(temp), max_len):
-                    temp.append('<PAD>')
+            temp = token[:max_len]
+        index = []
+        for char in temp:
+            if char in vocab.keys():
+                index.append(vocab[char])
             else:
-                temp = token[:max_len]
-            index = []
-            for char in temp:
-                if char in vocab.keys():
-                    index.append(vocab[char])
-                else:
-                    index.append(vocab['<UNK>'])
-            indexes.append(index)
+                index.append(vocab['<UNK>'])
+        indexes.append(index)
 
     return indexes
 
