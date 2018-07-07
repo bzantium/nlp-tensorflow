@@ -35,7 +35,10 @@ class logistic_regression:
             self.accuracy = tf.reduce_mean(tf.cast(correct, tf.float32))
         
         self.sess.run(tf.global_variables_initializer())
-        
+    
+    def get_loss(self, input_x, input_y):
+        return self.sess.run(self.loss, feed_dict={self.input_x: input_x, self.input_y: input_y})
+    
     def train(self, input_x, input_y):
         return self.sess.run([self.loss, self.train_op], feed_dict={self.input_x: input_x, self.input_y: input_y})
     
@@ -86,7 +89,10 @@ class three_layer_net:
             self.accuracy = tf.reduce_mean(tf.cast(correct, tf.float32))
         
         self.sess.run(tf.global_variables_initializer())
-        
+    
+    def get_loss(self, input_x, input_y):
+        return self.sess.run(self.loss, feed_dict={self.input_x: input_x, self.input_y: input_y})
+    
     def train(self, input_x, input_y):
         return self.sess.run([self.loss, self.train_op], feed_dict={self.input_x: input_x, self.input_y: input_y})
     
@@ -155,7 +161,10 @@ class RNN:
             self.accuracy = tf.reduce_mean(tf.cast(correct, tf.float32))
         
         self.sess.run(tf.global_variables_initializer())
-        
+    
+    def get_loss(self, input_x, input_y):
+        return self.sess.run(self.loss, feed_dict={self.input_x: input_x, self.input_y: input_y})
+           
     def train(self, input_x, input_y):
         return self.sess.run([self.loss, self.train_op], feed_dict={self.input_x: input_x, self.input_y: input_y})
     
@@ -230,7 +239,10 @@ class LSTM:
             
     def embedding_assign(self, embedding):
         return self.sess.run(self.embedding_init, feed_dict={self.embedding_placeholder: embedding})
-
+    
+    def get_loss(self, input_x, input_y):
+        return self.sess.run(self.loss, feed_dict={self.input_x: input_x, self.input_y: input_y})
+   
     def train(self, input_x, input_y):
         return self.sess.run([self.loss, self.train_op], feed_dict={self.input_x: input_x, self.input_y: input_y})
     
@@ -298,7 +310,10 @@ class LSTM_onehot:
             self.accuracy = tf.reduce_mean(tf.cast(correct, tf.float32))
 
         self.sess.run(tf.global_variables_initializer())
-
+    
+    def get_loss(self, input_x, input_y):
+        return self.sess.run(self.loss, feed_dict={self.input_x: input_x, self.input_y: input_y})
+   
     def train(self, input_x, input_y):
         return self.sess.run([self.loss, self.train_op], feed_dict={self.input_x: input_x, self.input_y: input_y})
 
@@ -371,7 +386,10 @@ class biLSTM:
             self.accuracy = tf.reduce_mean(tf.cast(correct, tf.float32))
             
         self.sess.run(tf.global_variables_initializer())
-
+    
+    def get_loss(self, input_x, input_y):
+        return self.sess.run(self.loss, feed_dict={self.input_x: input_x, self.input_y: input_y})
+   
     def train(self, input_x, input_y):
         return self.sess.run([self.loss, self.train_op], feed_dict={self.input_x: input_x, self.input_y: input_y})
     
@@ -446,7 +464,10 @@ class deepBiLSTM:
             self.accuracy = tf.reduce_mean(tf.cast(correct, tf.float32))
         
         self.sess.run(tf.global_variables_initializer())
-        
+    
+    def get_loss(self, input_x, input_y):
+        return self.sess.run(self.loss, feed_dict={self.input_x: input_x, self.input_y: input_y})
+           
     def train(self, input_x, input_y, dropout_keep_prob=0.7):
         return self.sess.run([self.loss, self.train_op], feed_dict={self.input_x: input_x, self.input_y: input_y, self.dropout_keep_prob: dropout_keep_prob})
     
@@ -515,7 +536,10 @@ class GRU:
             self.accuracy = tf.reduce_mean(tf.cast(correct, tf.float32))
         
         self.sess.run(tf.global_variables_initializer())
-        
+    
+    def get_loss(self, input_x, input_y):
+        return self.sess.run(self.loss, feed_dict={self.input_x: input_x, self.input_y: input_y})
+           
     def train(self, input_x, input_y):
         return self.sess.run([self.loss, self.train_op], feed_dict={self.input_x: input_x, self.input_y: input_y})
     
@@ -630,7 +654,10 @@ class CNN(object):
 
     def embedding_assign(self, embedding):
         return self.sess.run(self.embedding_init, feed_dict={self.embedding_placeholder: embedding})
-
+    
+    def get_loss(self, input_x, input_y):
+        return self.sess.run(self.loss, feed_dict={self.input_x: input_x, self.input_y: input_y})
+   
     def train(self, input_x, input_y):
         return self.sess.run([self.loss, self.train_op], feed_dict={self.input_x: input_x, self.input_y: input_y})
 
