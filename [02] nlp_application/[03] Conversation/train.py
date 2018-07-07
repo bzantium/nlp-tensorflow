@@ -13,7 +13,7 @@ if __name__ == "__main__":
     vocab, reverse_vocab, vocab_size = build_character(data)
     with open('vocab.json', 'w') as fp:
         json.dump(vocab, fp)
-    model = seq2seq(sess, encoder_vocab_size=vocab_size, decoder_vocab_size=vocab_size, max_step=50)
+    model = seq2seq(sess, encoder_vocab_size=vocab_size, decoder_vocab_size=vocab_size)
     input, target = make_dataset(data)
     batches = batch_iter(list(zip(input, target)), batch_size=64, num_epochs=1001)
     saver = tf.train.Saver(max_to_keep=3, keep_checkpoint_every_n_hours=0.5)
@@ -26,7 +26,7 @@ if __name__ == "__main__":
         y_train = sentence_to_char_index(y_train, vocab, is_target=True)
         l, _ = model.train(x_train, y_train)
         avgLoss.append(l)
-        if step % 50 == 0:
-            print('batch:', '%04d' % step, 'loss:', '%05f' % np.mean(avgLoss))
+        if step % 100 == 0:
+            print('batch:', '%04d' % step, 'loss:', '%.5f' % np.mean(avgLoss))
             saver.save(sess, os.path.join(DIR, "model"), global_step=step)
             avgLoss = []
