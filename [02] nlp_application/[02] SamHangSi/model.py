@@ -23,7 +23,7 @@ class reRNN:
         # embedding for vocabs
         with tf.variable_scope("embedding", reuse=tf.AUTO_REUSE):
             self.embedding = tf.Variable(
-                tf.random_uniform(shape=[self.vocab_size, embedding_size], minval=-1.0, maxval=1.0))
+                tf.random_uniform(shape=(self.vocab_size, embedding_size), minval=-1.0, maxval=1.0))
             embedded_full_input = tf.nn.embedding_lookup(self.embedding, self.full_input)
 
         # recurrent operations
@@ -36,14 +36,14 @@ class reRNN:
                                            embedded_full_input,
                                            input_length,
                                            dtype=tf.float32)  # outputs: [batch, time, hidden], bw_outputs: [batch, time, hidden]
-            outputs = tf.reshape(outputs, [-1, hidden_size])  # output: [batch*time, hidden]
+            outputs = tf.reshape(outputs, (-1, hidden_size))  # output: [batch*time, hidden]
 
         # output with rnn memories
         with tf.variable_scope("output", reuse=tf.AUTO_REUSE):
             self.W = tf.Variable(tf.truncated_normal(shape=(hidden_size, self.vocab_size)))
             self.b = tf.Variable(tf.constant(0.1, shape=(self.vocab_size,)))
             logits = tf.add(tf.matmul(outputs, self.W), self.b)  # logits: [batch*time, vocab_size]
-            logits = tf.reshape(logits, [batch_size, max_time_step, -1])  # logits: [batch, time, vocab_size]
+            logits = tf.reshape(logits, (batch_size, max_time_step, -1))  # logits: [batch, time, vocab_size]
 
         # loss calculation
         with tf.variable_scope("loss"):

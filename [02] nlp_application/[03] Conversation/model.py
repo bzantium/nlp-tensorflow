@@ -23,7 +23,8 @@ class seq2seq:
             self.decoder_targets = tf.placeholder(dtype=tf.int32, shape=(None, None), name='decoder_inputs')
             decoder_targets_length = tf.reduce_sum(tf.sign(self.decoder_targets), axis=1) + 1
             batch_size, decoder_max_length = tf.unstack(tf.shape(self.decoder_targets))
-            decoder_inputs = tf.concat((tf.transpose([tf.ones([batch_size], dtype=tf.int32)], perm=(1,0)), self.decoder_targets[:,:-1]), axis=1)
+            decoder_inputs = tf.concat((tf.transpose([tf.ones([batch_size], dtype=tf.int32)], perm=(1,0)),
+                                        self.decoder_targets[:,:-1]), axis=1)
 
         # embedding for encoder, decoder inputs
         with tf.variable_scope("embedding", reuse=tf.AUTO_REUSE):
