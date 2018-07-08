@@ -19,19 +19,27 @@ class seq2seq:
         with tf.variable_scope("placeholder"):
             self.encoder_inputs = tf.placeholder(dtype=tf.int32, shape=(None, None), name='encoder_inputs')
             encoder_inputs_length = tf.reduce_sum(tf.sign(self.encoder_inputs), axis=1)
-            embedding = tf.get_variable('embedding', dtype=tf.float32,
-                                             initializer=tf.random_uniform((self.encoder_vocab_size, self.embedding_size), minval=-1.0, maxval=1.0))
+
             self.decoder_targets = tf.placeholder(dtype=tf.int32, shape=(None, None), name='decoder_inputs')
             decoder_targets_length = tf.reduce_sum(tf.sign(self.decoder_targets), axis=1) + 1
             batch_size, decoder_max_length = tf.unstack(tf.shape(self.decoder_targets))
             decoder_inputs = tf.concat((tf.transpose([tf.ones([batch_size], dtype=tf.int32)], perm=(1,0)), self.decoder_targets[:,:-1]), axis=1)
 
+        # embedding for encoder, decoder inputs
+        with tf.variable_scope("embedding", reuse=tf.AUTO_REUSE):
+            embedding = tf.get_variable('embedding',
+                                        dtype=tf.float32,
+                                        initializer=tf.random_uniform((self.encoder_vocab_size,
+                                                                       self.embedding_size),
+                                                                       minval=-1.0, maxval=1.0))
+            embedded_encoder_inputs = tf.nn.embedding_lookup(embedding, self.encoder_inputs)
+            embedded_decoder_inputs = tf.nn.embedding_lookup(embedding, decoder_inputs)
+
         # encoder operations
         with tf.variable_scope("encoder", reuse=tf.AUTO_REUSE):
             self.encoder_fw_cell = tf.nn.rnn_cell.LSTMCell(self.encoder_hidden_size)
             self.encoder_bw_cell = tf.nn.rnn_cell.LSTMCell(self.encoder_hidden_size)
-            embedded_encoder_inputs = tf.nn.embedding_lookup(embedding, self.encoder_inputs)
-            embedded_decoder_inputs = tf.nn.embedding_lookup(embedding, decoder_inputs)
+
             ((_, _),
              (encoder_fw_last_state, encoder_bw_last_state)) = tf.nn.bidirectional_dynamic_rnn(self.encoder_fw_cell,
                                                                                                self.encoder_bw_cell,
@@ -64,8 +72,9 @@ class seq2seq:
         with tf.variable_scope("loss"):
             self.loss = tf.reduce_mean(tf.contrib.seq2seq.sequence_loss(logits=logits,
                                                                         targets=self.decoder_targets,
-                                                                        weights=tf.sequence_mask(decoder_targets_length, decoder_max_length,
-                                                                        dtype=tf.float32)))
+                                                                        weights=tf.sequence_mask(decoder_targets_length,
+                                                                                                 decoder_max_length,
+                                                                                                 dtype=tf.float32)))
 
         # train with clipped gradient
         with tf.variable_scope("train", reuse=tf.AUTO_REUSE):
@@ -99,7 +108,8 @@ class seq2seq:
         self.sess.run(tf.global_variables_initializer())
 
     def train(self, encoder_inputs, decoder_targets):
-        return self.sess.run([self.loss, self.train_op], feed_dict={self.encoder_inputs:encoder_inputs, self.decoder_targets:decoder_targets})
+        return self.sess.run([self.loss, self.train_op], feed_dict={self.encoder_inputs:encoder_inputs,
+                                                                    self.decoder_targets:decoder_targets})
 
     def inference(self, encoder_inputs):
         return self.sess.run(self.predictions, feed_dict={self.encoder_inputs: encoder_inputs})

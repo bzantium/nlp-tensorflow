@@ -26,7 +26,8 @@ class CNN(object):
             self.input_x = tf.placeholder(tf.int32, (None, self.sequence_length))
             self.input_y = tf.placeholder(tf.int32, (None,))
             self.embedding_placeholder = tf.placeholder(tf.float32, (self.vocab_size, self.embedding_size))
-        # Embedding layer
+
+        # Embedding layer for input
         with tf.variable_scope("embedding", reuse=tf.AUTO_REUSE):
             W = tf.get_variable("W", dtype=tf.float32,
                                 initializer=tf.random_uniform([self.vocab_size, self.embedding_size], -1.0, 1.0),
@@ -35,7 +36,7 @@ class CNN(object):
             embedded_chars = tf.nn.embedding_lookup(W, self.input_x)
             embedded_chars_expanded = tf.expand_dims(embedded_chars, -1)
 
-        # Create a convolution + maxpool layer for each filter size
+        # Create a convolution + max_pool layer for each filter size
         pooled_outputs = []
         for filter_size in self.filter_sizes:
             with tf.variable_scope("conv-maxpool-%s" % filter_size, reuse=tf.AUTO_REUSE):
