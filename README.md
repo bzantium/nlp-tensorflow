@@ -23,7 +23,8 @@ $ pip install -r requirements.txt
 5. [CNN](https://github.com/Bricoler/nlp-tensorflow/blob/master/%5B01%5D%20sentiment_analysis/%5B05%5D%20CNN.ipynb)
 6. [word2vec](https://github.com/Bricoler/nlp-tensorflow/blob/master/%5B01%5D%20sentiment_analysis/%5B08%5D%20word2vec.ipynb)
 7. [doc2vec](https://github.com/Bricoler/nlp-tensorflow/blob/master/%5B01%5D%20sentiment_analysis/%5B09%5D%20doc2vec.ipynb)
-  
+8. Every model is defined at [models](https://github.com/Bricoler/nlp-tensorflow/blob/master/%5B01%5D%20sentiment_analysis/models.py)
+
 <br />
 
 ## 3. [02] nlp_application
