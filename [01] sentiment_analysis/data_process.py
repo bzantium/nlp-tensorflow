@@ -33,6 +33,13 @@ def tokenizer_process(lines):
         tokens.append(token)
     return tokens
 
+def pos_process(lines):
+    tokens = []
+    for line in lines:
+        token = pos_extractor(line)
+        tokens.append(token)
+    return tokens
+
 def morphs_process(lines):
     tokens = []
     for line in lines:
