@@ -25,7 +25,14 @@ def morphs_extractor(sentence):
     """
     tokens = tw.morphs(sentence, norm=True, stem=True)
     return tokens
-        
+
+def tokenizer_process(lines):
+    tokens = []
+    for line in lines:
+        token = tokenizer(line)
+        tokens.append(token)
+    return tokens
+
 def morphs_process(lines):
     tokens = []
     for line in lines:
