@@ -1,4 +1,0 @@
-model_checkpoint_path: "my-model.ckpt-50000"
-all_model_checkpoint_paths: "my-model.ckpt-49800"
-all_model_checkpoint_paths: "my-model.ckpt-49900"
-all_model_checkpoint_paths: "my-model.ckpt-50000"
