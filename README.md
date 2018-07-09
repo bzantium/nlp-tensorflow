@@ -18,7 +18,7 @@ $ pip install -r requirements.txt
 ### Contents
 1. [Logistic Regression](https://github.com/Bricoler/nlp-tensorflow/blob/master/%5B01%5D%20sentiment_analysis/%5B01%5D%20logistic_regression.ipynb)
 2. [Feed Forward Neural Network](https://github.com/Bricoler/nlp-tensorflow/blob/master/%5B01%5D%20sentiment_analysis/%5B02%5D%20three_layer_net.ipynb)
-3. [RNN](https://github.com/Bricoler/nlp-tensorflow/blob/master/%5B01%5D%20sentiment_analysis/%5B03%5D%20RNN.ipynb)
+3. [RNN](https://github.com/Bricoler/nlp-tensorflow/blob/master/%5B01%5D%20sentiment_analysis/%5B03%5D%20RNN.ipynb): with rnn tensorflow API explanation
 4. [LSTM](https://github.com/Bricoler/nlp-tensorflow/blob/master/%5B01%5D%20sentiment_analysis/%5B04%5D%20LSTM.ipynb)
 5. [CNN](https://github.com/Bricoler/nlp-tensorflow/blob/master/%5B01%5D%20sentiment_analysis/%5B05%5D%20CNN.ipynb)
 6. [word2vec](https://github.com/Bricoler/nlp-tensorflow/blob/master/%5B01%5D%20sentiment_analysis/%5B08%5D%20word2vec.ipynb)
