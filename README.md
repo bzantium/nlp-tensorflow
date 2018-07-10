@@ -16,15 +16,17 @@ $ pip install -r requirements.txt
 다양한 컴퓨터 사양으로 테스트 해 볼 수 있도록 데이터셋을 크기에 따라 세 가지를 두었습니다.<br /><br />
 
 ### Contents
-1. [Data Process]
-2. [Logistic Regression](https://github.com/Bricoler/nlp-tensorflow/blob/master/%5B01%5D%20sentiment_analysis/%5B01%5D%20logistic_regression.ipynb)
-3. [Feed Forward Neural Network](https://github.com/Bricoler/nlp-tensorflow/blob/master/%5B01%5D%20sentiment_analysis/%5B02%5D%20three_layer_net.ipynb)
-4. [RNN](https://github.com/Bricoler/nlp-tensorflow/blob/master/%5B01%5D%20sentiment_analysis/%5B03%5D%20RNN.ipynb): with rnn tensorflow API explanation
-5. [LSTM](https://github.com/Bricoler/nlp-tensorflow/blob/master/%5B01%5D%20sentiment_analysis/%5B04%5D%20LSTM.ipynb)
-6. [CNN](https://github.com/Bricoler/nlp-tensorflow/blob/master/%5B01%5D%20sentiment_analysis/%5B05%5D%20CNN.ipynb)
-7. [word2vec](https://github.com/Bricoler/nlp-tensorflow/blob/master/%5B01%5D%20sentiment_analysis/%5B08%5D%20word2vec.ipynb)
-8. [doc2vec](https://github.com/Bricoler/nlp-tensorflow/blob/master/%5B01%5D%20sentiment_analysis/%5B09%5D%20doc2vec.ipynb)
-9. Every model is defined at [models](https://github.com/Bricoler/nlp-tensorflow/blob/master/%5B01%5D%20sentiment_analysis/models.py)
+01. [Data Process](https://github.com/Bricoler/nlp-tensorflow/blob/master/01-sentiment_analysis/01-data_process.ipynb)
+02. [Logistic Regression](https://github.com/Bricoler/nlp-tensorflow/blob/master/01-sentiment_analysis/02-logistic_regression.ipynb)
+03. [Feed Forward Neural Network](https://github.com/Bricoler/nlp-tensorflow/blob/master/01-sentiment_analysis/03-three_layer_net.ipynb)
+04. [RNN](https://github.com/Bricoler/nlp-tensorflow/blob/master/01-sentiment_analysis/04-RNN.ipynb): with rnn tensorflow API explanation
+05. [LSTM](https://github.com/Bricoler/nlp-tensorflow/blob/master/01-sentiment_analysis/05-LSTM.ipynb)
+06. [CNN](https://github.com/Bricoler/nlp-tensorflow/blob/master/01-sentiment_analysis/06-CNN.ipynb)
+07. [POS](https://github.com/Bricoler/nlp-tensorflow/blob/master/01-sentiment_analysis/07-POS.ipynb): with konlpy Twitter API
+08. [Morphs](https://github.com/Bricoler/nlp-tensorflow/blob/master/01-sentiment_analysis/08-Morphs.ipynb): with konlpy Twitter API
+09. [word2vec](https://github.com/Bricoler/nlp-tensorflow/blob/master/01-sentiment_analysis/09-word2vec.ipynb): with gensim API
+10. [doc2vec](https://github.com/Bricoler/nlp-tensorflow/blob/master/01-sentiment_analysis/10-doc2vec.ipynb): with gensim API
+11. Every model is defined at [models](https://github.com/Bricoler/nlp-tensorflow/blob/master/01-sentiment_analysis/models.py)
 
 <br />
 
