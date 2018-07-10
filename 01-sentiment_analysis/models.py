@@ -551,10 +551,8 @@ class GRU:
     def get_accuracy(self, input_x, input_y):
         return self.sess.run(self.accuracy, feed_dict={self.input_x: input_x, self.input_y: input_y})
 
-
-import tensorflow as tf
-
-class CNN(object):
+    
+class CNN:
     """
     The implementation is based on following:
     dennybritz: simplified implementation of Kim's Convolutional Neural Networks for Sentence Classification paper in Tensorflow.
