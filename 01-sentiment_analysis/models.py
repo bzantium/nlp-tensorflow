@@ -478,8 +478,8 @@ class deepBiLSTM:
     def embedding_assign(self, embedding):
         return self.sess.run(self.embedding_init, feed_dict={self.embedding_placeholder: embedding})
     
-    def get_loss(self, input_x, input_y):
-        return self.sess.run(self.loss, feed_dict={self.input_x: input_x, self.input_y: input_y})
+    def get_loss(self, input_x, input_y, dropout_keep_prob=1.0):
+        return self.sess.run(self.loss, feed_dict={self.input_x: input_x, self.input_y: input_y, self.dropout_keep_prob: dropout_keep_prob})
            
     def train(self, input_x, input_y, dropout_keep_prob=0.7):
         return self.sess.run([self.loss, self.train_op], feed_dict={self.input_x: input_x, self.input_y: input_y, self.dropout_keep_prob: dropout_keep_prob})
