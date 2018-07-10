@@ -327,24 +327,27 @@ class LSTM:
     
 class biLSTM:
 
-    def __init__(self, sess, vocab_size, embedding_size=300, hidden_size=128, n_class=2, lr=1e-2):
+    def __init__(self, sess, vocab_size, embedding_size=300, hidden_size=128, n_class=2, lr=1e-2, trainable=True):
         self.sess = sess
         self.vocab_size = vocab_size
         self.embedding_size = embedding_size
         self.hidden_size = hidden_size
         self.n_class = n_class
         self.lr = lr
+        self.trainable = trainable
         self._build_net()
 
     def _build_net(self):
         with tf.variable_scope("placeholder"):
             self.input_x = tf.placeholder(tf.int32, (None, None))
             self.input_y = tf.placeholder(tf.int32, (None,))
+            self.embedding_placeholder = tf.placeholder(tf.float32, (self.vocab_size, self.embedding_size))
             input_length = tf.reduce_sum(tf.sign(self.input_x), axis=1)
         
         with tf.variable_scope("embedding", reuse=tf.AUTO_REUSE):
             W = tf.get_variable('W', dtype=tf.float32,
-                initializer=tf.random_uniform((self.vocab_size, self.embedding_size), minval=-1.0, maxval=1.0))
+                initializer=tf.random_uniform((self.vocab_size, self.embedding_size), minval=-1.0, maxval=1.0), trainable=self.trainable)
+            self.embedding_init = W.assign(self.embedding_placeholder)
             embedded_input_x = tf.nn.embedding_lookup(W, self.input_x)
         
         with tf.variable_scope("recurrent"):
@@ -388,6 +391,9 @@ class biLSTM:
             self.accuracy = tf.reduce_mean(tf.cast(correct, tf.float32))
             
         self.sess.run(tf.global_variables_initializer())
+        
+    def embedding_assign(self, embedding):
+        return self.sess.run(self.embedding_init, feed_dict={self.embedding_placeholder: embedding})
     
     def get_loss(self, input_x, input_y):
         return self.sess.run(self.loss, feed_dict={self.input_x: input_x, self.input_y: input_y})
@@ -402,28 +408,30 @@ class biLSTM:
         return self.sess.run(self.accuracy, feed_dict={self.input_x: input_x, self.input_y: input_y})
     
     
-    
 class deepBiLSTM:
 
-    def __init__(self, sess, vocab_size, embedding_size=300, hidden_size=128, n_class=2, lr=1e-2):
+    def __init__(self, sess, vocab_size, embedding_size=300, hidden_size=128, n_class=2, lr=1e-2, dropout_keep_prob=0.7, trainable=True):
         self.sess = sess
         self.vocab_size = vocab_size
         self.embedding_size = embedding_size
         self.hidden_size = hidden_size
         self.n_class = n_class
         self.lr = lr
+        self.dropout_keep_prob = dropout_keep_prob
+        self.trainable = trainable
         self._build_net()
 
     def _build_net(self):
         with tf.variable_scope("placeholder"):
             self.input_x = tf.placeholder(tf.int32, (None, None))
             self.input_y = tf.placeholder(tf.int32, (None,))
-            self.dropout_keep_prob = tf.placeholder(tf.float32)
+            self.embedding_placeholder = tf.placeholder(tf.float32, (self.vocab_size, self.embedding_size))
             input_length = tf.reduce_sum(tf.sign(self.input_x), axis=1)
         
         with tf.variable_scope("embedding", reuse=tf.AUTO_REUSE):
             W = tf.get_variable('W', dtype=tf.float32,
-                initializer=tf.random_uniform((self.vocab_size, self.embedding_size), minval=-1.0, maxval=1.0))
+                initializer=tf.random_uniform((self.vocab_size, self.embedding_size), minval=-1.0, maxval=1.0), trainable=self.trainable)
+            self.embedding_init = W.assign(self.embedding_placeholder)
             embedded_input_x = tf.nn.embedding_lookup(W, self.input_x)
 
             
@@ -466,6 +474,9 @@ class deepBiLSTM:
             self.accuracy = tf.reduce_mean(tf.cast(correct, tf.float32))
         
         self.sess.run(tf.global_variables_initializer())
+        
+    def embedding_assign(self, embedding):
+        return self.sess.run(self.embedding_init, feed_dict={self.embedding_placeholder: embedding})
     
     def get_loss(self, input_x, input_y):
         return self.sess.run(self.loss, feed_dict={self.input_x: input_x, self.input_y: input_y})
@@ -482,24 +493,27 @@ class deepBiLSTM:
     
 class GRU:
 
-    def __init__(self, sess, vocab_size, embedding_size=300, hidden_size=128, n_class=2, lr=1e-2):
+    def __init__(self, sess, vocab_size, embedding_size=300, hidden_size=128, n_class=2, lr=1e-2, trainable=True):
         self.sess = sess
         self.vocab_size = vocab_size
         self.embedding_size = embedding_size
         self.hidden_size = hidden_size
         self.n_class = n_class
         self.lr = lr
+        self.trainable = trainable
         self._build_net()
 
     def _build_net(self):
         with tf.variable_scope("placeholder"):
             self.input_x = tf.placeholder(tf.int32, (None, None))
             self.input_y = tf.placeholder(tf.int32, (None,))
+            self.embedding_placeholder = tf.placeholder(tf.float32, (self.vocab_size, self.embedding_size))
             input_length = tf.reduce_sum(tf.sign(self.input_x), axis=1)
-            
+        
         with tf.variable_scope("embedding", reuse=tf.AUTO_REUSE):
             W = tf.get_variable('W', dtype=tf.float32,
-                initializer=tf.random_uniform((self.vocab_size, self.embedding_size), minval=-1.0, maxval=1.0))
+                initializer=tf.random_uniform((self.vocab_size, self.embedding_size), minval=-1.0, maxval=1.0), trainable=self.trainable)
+            self.embedding_init = W.assign(self.embedding_placeholder)
             embedded_input_x = tf.nn.embedding_lookup(W, self.input_x)
         
         with tf.variable_scope("recurrent"):
@@ -538,6 +552,9 @@ class GRU:
             self.accuracy = tf.reduce_mean(tf.cast(correct, tf.float32))
         
         self.sess.run(tf.global_variables_initializer())
+        
+    def embedding_assign(self, embedding):
+        return self.sess.run(self.embedding_init, feed_dict={self.embedding_placeholder: embedding})
     
     def get_loss(self, input_x, input_y):
         return self.sess.run(self.loss, feed_dict={self.input_x: input_x, self.input_y: input_y})
