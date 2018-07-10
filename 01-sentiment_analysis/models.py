@@ -410,14 +410,13 @@ class biLSTM:
     
 class deepBiLSTM:
 
-    def __init__(self, sess, vocab_size, embedding_size=300, hidden_size=128, n_class=2, lr=1e-2, dropout_keep_prob=0.7, trainable=True):
+    def __init__(self, sess, vocab_size, embedding_size=300, hidden_size=128, n_class=2, lr=1e-2, trainable=True):
         self.sess = sess
         self.vocab_size = vocab_size
         self.embedding_size = embedding_size
         self.hidden_size = hidden_size
         self.n_class = n_class
         self.lr = lr
-        self.dropout_keep_prob = dropout_keep_prob
         self.trainable = trainable
         self._build_net()
 
@@ -426,6 +425,7 @@ class deepBiLSTM:
             self.input_x = tf.placeholder(tf.int32, (None, None))
             self.input_y = tf.placeholder(tf.int32, (None,))
             self.embedding_placeholder = tf.placeholder(tf.float32, (self.vocab_size, self.embedding_size))
+            self.dropout_keep_prob = tf.placeholder(tf.float32)
             input_length = tf.reduce_sum(tf.sign(self.input_x), axis=1)
         
         with tf.variable_scope("embedding", reuse=tf.AUTO_REUSE):
