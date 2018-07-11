@@ -9,7 +9,7 @@ from model import CNN
 if __name__ == "__main__":
     DIR = "models"
 
-    # prepare dataset
+    # build dataset
     train = pd.read_csv('./data/train.txt', delimiter='\t')
     test = pd.read_csv('./data/test.txt', delimiter='\t')
     data = train.append(test)
@@ -24,19 +24,26 @@ if __name__ == "__main__":
     with open('vocab.json', 'w') as fp:
         json.dump(vocab, fp)
 
+    # save configuration
     with open('config.txt', 'w') as f:
         f.write(str(vocab_size) + '\n')
         f.write(str(max_length))
 
-    # import model
+    # open session
     config = tf.ConfigProto()
     config.gpu_options.allow_growth = True
     sess = tf.Session(config=config)
 
-
+    # make model instance
     model = CNN(sess=sess, vocab_size=vocab_size, sequence_length=max_length, trainable=True)
+
+    # assign pretrained embedding vectors
     model.embedding_assign(embedding)
+
+    # make train batches
     batches = batch_iter(list(zip(x_input, y_input)), batch_size=64, num_epochs=5)
+
+    # model saver
     saver = tf.train.Saver(max_to_keep=3, keep_checkpoint_every_n_hours=0.5)
 
     # train model
