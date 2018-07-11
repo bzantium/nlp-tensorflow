@@ -16,7 +16,7 @@ if __name__ == "__main__":
     with open('vocab.json', 'w') as fp:
         json.dump(vocab, fp)
 
-    # allow gpu growth
+    # open session
     config = tf.ConfigProto()
     config.gpu_options.allow_growth = True
     sess = tf.Session(config=config)

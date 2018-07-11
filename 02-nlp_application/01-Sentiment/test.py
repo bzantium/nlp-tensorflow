@@ -15,7 +15,7 @@ if __name__ == "__main__":
         vocab_size = int(re.sub('\n', '', f.readline()))
         max_length = int(f.readline())
 
-    # allow gpu growth
+    # open session
     config = tf.ConfigProto()
     config.gpu_options.allow_growth = True
     sess = tf.Session(config=config)

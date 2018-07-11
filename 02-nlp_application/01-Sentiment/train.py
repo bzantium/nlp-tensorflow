@@ -29,7 +29,7 @@ if __name__ == "__main__":
         f.write(str(vocab_size) + '\n')
         f.write(str(max_length))
 
-    # allow gpu growth
+    # open session
     config = tf.ConfigProto()
     config.gpu_options.allow_growth = True
     sess = tf.Session(config=config)

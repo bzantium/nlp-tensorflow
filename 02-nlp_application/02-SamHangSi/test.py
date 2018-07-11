@@ -14,7 +14,7 @@ if __name__ == "__main__":
         reverse_vocab[value] = key
     vocab_size = len(vocab)
 
-    # allow gpu growth
+    # open session
     config = tf.ConfigProto()
     config.gpu_options.allow_growth = True
     sess = tf.Session(config=config)
