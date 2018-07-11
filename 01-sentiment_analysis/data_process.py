@@ -83,9 +83,9 @@ def build_vocab(lines, max_vocab=None):
     vocab_idx = 2
     
     if max_vocab == None or max_vocab > len(word_counter):
-        max_vocab = len(word_counter)
+        max_vocab = len(word_counter) + 2
     
-    for key, value in word_counter.most_common(max_vocab):
+    for key, value in word_counter.most_common(max_vocab-2):
         vocab[key] = vocab_idx
         vocab_idx += 1
 
@@ -216,9 +216,9 @@ def build_vocab_pos(lines, max_vocab=None):
     vocab_idx = 2
     
     if max_vocab == None or max_vocab > len(word_counter):
-        max_vocab = len(word_counter)
+        max_vocab = len(word_counter) + 2
     
-    for key, value in word_counter.most_common(max_vocab):
+    for key, value in word_counter.most_common(max_vocab-2):
         vocab[key] = vocab_idx
         vocab_idx += 1
 
@@ -348,9 +348,9 @@ def build_vocab_morphs(lines, max_vocab=None):
     vocab_idx = 2
     
     if max_vocab == None or max_vocab > len(word_counter):
-        max_vocab = len(word_counter)
+        max_vocab = len(word_counter) + 2
     
-    for key, value in word_counter.most_common(max_vocab):
+    for key, value in word_counter.most_common(max_vocab-2):
         vocab[key] = vocab_idx
         vocab_idx += 1
 
