@@ -4,20 +4,29 @@ import tensorflow as tf
 import json
 
 if __name__ == "__main__":
-    PATH = "models"
-    config = tf.ConfigProto()
-    config.gpu_options.allow_growth = True
-    sess = tf.Session(config=config)
+    DIR = "models"
+
+    # load vocab, reverse_vocab, vocab_size
     with open('vocab.json', 'r') as fp:
         vocab = json.load(fp)
     reverse_vocab = dict()
     for key, value in vocab.items():
         reverse_vocab[value] = key
     vocab_size = len(vocab)
-    model = reRNN(sess=sess, vocab_size=vocab_size, max_step=70)
-    saver = tf.train.Saver()
-    saver.restore(sess, tf.train.latest_checkpoint(PATH))
 
+    # allow gpu growth
+    config = tf.ConfigProto()
+    config.gpu_options.allow_growth = True
+    sess = tf.Session(config=config)
+
+    # make model instance
+    model = reRNN(sess=sess, vocab_size=vocab_size, max_step=70)
+
+    # load trained model
+    saver = tf.train.Saver()
+    saver.restore(sess, tf.train.latest_checkpoint(DIR))
+
+    # inference
     while(True):
         chars = input('세 글자를 입력하세요: ')
         if chars == "exit":

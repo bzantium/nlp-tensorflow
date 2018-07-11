@@ -10,17 +10,24 @@ if __name__ == "__main__":
     with open('vocab.json', 'r') as fp:
         vocab = json.load(fp)
 
+    # load configuration
     with open('config.txt', 'r') as f:
         vocab_size = int(re.sub('\n', '', f.readline()))
         max_length = int(f.readline())
 
+    # allow gpu growth
     config = tf.ConfigProto()
     config.gpu_options.allow_growth = True
     sess = tf.Session(config=config)
+
+    # make model instance
     model = CNN(sess=sess, vocab_size=vocab_size, sequence_length=max_length, trainable=True)
+
+    # load trained model
     saver = tf.train.Saver()
     saver.restore(sess, tf.train.latest_checkpoint(PATH))
 
+    # inference
     while True:
         test = input("User >> ")
         if test == "exit":
