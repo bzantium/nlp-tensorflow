@@ -152,6 +152,15 @@ def make_dataset(data):
         target.append(data[i+1])
     return input, target
 
+	
+def make_dataset_for_translation(data):
+    input = []
+    target = []
+    for i in range(0, len(data), 2):
+        input.append(data[i])
+        target.append(data[i+1])
+    return input, target
+
 
 def batch_iter(data, batch_size, num_epochs, shuffle=True):
     """

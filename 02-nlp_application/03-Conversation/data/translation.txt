@@ -1,0 +1,14 @@
+유기체를 선택하고 짝 짓는 인간의 임무는 유전알고리즘의 동작 과정에서는 적합성 함수가 압축하여 수행한다.
+The human task of selecting and pairing organisms is performed by the fitness function in the course of genetic algorithm operation.
+하지만 더 감지하기 힘든 부분은 자연의 임무다.
+But the more difficult part to detect is the mission of nature.
+유전 알고리즘과 다층 퍼셉트론이 얼마나 다른지에 주목하자.
+Notice how the genetic algorithm differs from the multilayer perceptron.
+머신러닝과 삶에서 매우 중요한 문제는 탐험과 개발 사이 딜레마다.
+A very important issue in machine learning and life is the dilemma between exploration and development.
+최적 학습에 도달하는 길은 많은 사람이 들어 본 공식에서 출발한다.
+The way to reach optimal learning starts from the formula that many people have heard.
+베이즈주의자는 확률은 횟수가 아니라 주관적인 믿음의 정도라고 말한다.
+The Bayesian says that the probability is not the number of times but the degree of subjective belief.
+삼성전자는 반도체를 만드는 회사다.
+Samsung Electronics is a semiconductor company.
